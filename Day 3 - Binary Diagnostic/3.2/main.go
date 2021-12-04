@@ -48,19 +48,19 @@ func main() {
 
 	// Calculate the oxygen rating
 	fmt.Println("Calculating oxygen rating...")
-	oxygenRating := findDesiredRating(inputInt, true)
+	oxygenRating := getRating(inputInt, true)
 	fmt.Println("Oxygen rating:", oxygenRating)
 
 	// Calculate the CO2 scrubber rating
 	fmt.Println("Calculating CO2 scrubber rating...")
-	scrubberRating := findDesiredRating(inputInt, false)
+	scrubberRating := getRating(inputInt, false)
 	fmt.Println("CO2 scrubber rating:", scrubberRating)
 
-	// Calculate the life support rating 698
+	// Calculate the life support rating
 	lifeSupportRating := getDecimal(oxygenRating) * getDecimal(scrubberRating)
 
-	// print the output: 2715525 - 2808054
-	fmt.Printf("The output is: %d\n", lifeSupportRating)
+	// print the output
+	fmt.Printf("The life support rating is: %d\n", lifeSupportRating)
 }
 
 // Convert binary to decimal.
@@ -77,63 +77,41 @@ func getDecimal(binary []int) int {
 }
 
 // Get the rating for the oxygen or CO2 scrubber depending on the state of the switch.
-func findDesiredRating(input [][]int, isOxygenRating bool) []int {
-	var output []int
-
-	// get the lenght of the columns & rows
+func getRating(input [][]int, isOxygenRating bool) []int {
 	columns := len(input[0])
 	for i := 0; i < columns; i++ {
-
 		// Initialize for a new itteration.
-		counter := 0
-		tempList := make([][]int, 0)
+		listOfZeros := make([][]int, 0)
+		listOfOnes := make([][]int, 0)
+
 		rows := len(input)
-
-		fmt.Printf("Resetting counter: %d\n", counter)
-		fmt.Printf("Checking column number %d\n", i)
-		fmt.Printf("Setting the row length to the new list is: %v\n", len(input))
-
 		for j := 0; j < rows; j++ {
 			if input[j][i] == 1 {
-				counter++
-			}
-		}
-
-		fmt.Printf("Found '%d' binary 1\n", counter)
-		fmt.Printf("binary 1 is the most common number? %v\n", counter >= len(input)/2)
-
-		for j := 0; j < rows; j++ {
-			if isOxygenRating {
-				if float64(counter) >= float64(len(input))/2 {
-					if input[j][i] == 1 {
-						tempList = append(tempList, input[j])
-					}
-				} else {
-					if input[j][i] == 0 {
-						tempList = append(tempList, input[j])
-					}
-				}
+				listOfOnes = append(listOfOnes, input[j])
 			} else {
-				if float64(counter) >= float64(len(input))/2 {
-					if input[j][i] == 0 {
-						tempList = append(tempList, input[j])
-					}
-				} else {
-					if input[j][i] == 1 {
-						tempList = append(tempList, input[j])
-					}
-				}
+				listOfZeros = append(listOfZeros, input[j])
 			}
 		}
 
-		if len(tempList) == 1 {
-			output = tempList[0]
-			break
+		if isOxygenRating {
+			if len(listOfOnes) >= len(listOfZeros) {
+				input = listOfOnes
+			} else {
+				input = listOfZeros
+			}
 		} else {
-			input = tempList
+			if len(listOfZeros) <= len(listOfOnes) {
+				input = listOfZeros
+			} else {
+				input = listOfOnes
+			}
+		}
+
+		if len(input) == 1 {
+			break
 		}
 	}
-	return output
+	return input[0]
 }
 
 // by splitting the string into a slice of characters, we can convert the string to a slice of digits.

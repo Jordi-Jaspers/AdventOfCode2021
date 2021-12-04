@@ -23,7 +23,7 @@
 // Then, consider the second bit of the 5 remaining numbers: there are fewer 1 bits (2) than 0 bits (3), so keep only the 2 numbers with a 1 in the second position: 01111 and 01010.
 // In the third position, there are an equal number of 0 bits and 1 bits (one each). So, to find the CO2 scrubber rating, keep the number with a 0 in that position: 01010.
 // As there is only one number left, stop; the CO2 scrubber rating is 01010, or 10 in decimal.
-// Finally, to find the life support rating, multiply the oxygen generator rating (23) by the CO2 scrubber rating (10) to get 230.he epsilon rate is calculated in a similar way; rather than use the most common bit, the least common bit from each position is used. So, the epsilon rate is 01001, or 9 in decimal. Multiplying the gamma rate (22) by the epsilon rate (9) produces the power consumption, 198.
+// Finally, to find the life support rating, multiply the oxygen generator rating (23) by the CO2 scrubber rating (10) to get 230.
 // ========================================================== CODE ==========================================================
 package main
 
@@ -38,58 +38,99 @@ import (
 
 func main() {
 
-	// read the input file
+	// Read the input file
+	fmt.Println("Reading input file...")
 	input := readInput("input.txt")
 
-	// convert the input to a slice of digits
+	// Convert the input to a slice of digits
+	fmt.Println("Converting input to digits...")
 	inputInt := convertStringToDigits(input)
 
-	// calculate the power consumption
-	binary := getFinalBit(inputInt)
+	// Calculate the oxygen rating
+	fmt.Println("Calculating oxygen rating...")
+	oxygenRating := findDesiredRating(inputInt, true)
+	fmt.Println("Oxygen rating:", oxygenRating)
 
-	// calculate the power consumption
-	output := getPowerConsmption(binary)
+	// Calculate the CO2 scrubber rating
+	fmt.Println("Calculating CO2 scrubber rating...")
+	scrubberRating := findDesiredRating(inputInt, false)
+	fmt.Println("CO2 scrubber rating:", scrubberRating)
 
-	// print the output
-	fmt.Println(output)
+	// Calculate the life support rating 698
+	lifeSupportRating := getDecimal(oxygenRating) * getDecimal(scrubberRating)
+
+	// print the output: 2715525 - 2808054
+	fmt.Printf("The output is: %d\n", lifeSupportRating)
 }
 
-func getPowerConsmption(binary []int) int {
+// Convert binary to decimal.
+func getDecimal(binary []int) int {
 	length := len(binary) - 1
-	gammaRate := 0
-	epsilonRate := 0
+	decimal := 0
 
-	// Convert binary to decimal: 1001
 	for i := length; i != -1; i-- {
 		if binary[i] == 1 {
-			gammaRate += int(math.Pow(2, float64(length-i)))
-		} else {
-			epsilonRate += int(math.Pow(2, float64(length-i)))
+			decimal += int(math.Pow(2, float64(length-i)))
 		}
 	}
-	return gammaRate * epsilonRate
+	return decimal
 }
 
-// get the final bit by adding all the bits in the input and count the number of 1s.
-func getFinalBit(input [][]int) []int {
-	rows := len(input)
-	cols := len(input[0])
-	fmt.Println(rows, cols)
-	output := make([]int, len(input[0]))
+// Get the rating for the oxygen or CO2 scrubber depending on the state of the switch.
+func findDesiredRating(input [][]int, isOxygenRating bool) []int {
+	var output []int
 
-	// iterate over the rows -->  [1 0 1 0 1 0 1]
-	for i := 0; i < cols; i++ {
+	// get the lenght of the columns & rows
+	columns := len(input[0])
+	for i := 0; i < columns; i++ {
+
+		// Initialize for a new itteration.
 		counter := 0
+		tempList := make([][]int, 0)
+		rows := len(input)
+
+		fmt.Printf("Resetting counter: %d\n", counter)
+		fmt.Printf("Checking column number %d\n", i)
+		fmt.Printf("Setting the row length to the new list is: %v\n", len(input))
+
 		for j := 0; j < rows; j++ {
 			if input[j][i] == 1 {
 				counter++
 			}
 		}
 
-		if counter >= len(input)/2 {
-			output[i] = 1
+		fmt.Printf("Found '%d' binary 1\n", counter)
+		fmt.Printf("binary 1 is the most common number? %v\n", counter >= len(input)/2)
+
+		for j := 0; j < rows; j++ {
+			if isOxygenRating {
+				if float64(counter) >= float64(len(input))/2 {
+					if input[j][i] == 1 {
+						tempList = append(tempList, input[j])
+					}
+				} else {
+					if input[j][i] == 0 {
+						tempList = append(tempList, input[j])
+					}
+				}
+			} else {
+				if float64(counter) >= float64(len(input))/2 {
+					if input[j][i] == 0 {
+						tempList = append(tempList, input[j])
+					}
+				} else {
+					if input[j][i] == 1 {
+						tempList = append(tempList, input[j])
+					}
+				}
+			}
+		}
+
+		if len(tempList) == 1 {
+			output = tempList[0]
+			break
 		} else {
-			output[i] = 0
+			input = tempList
 		}
 	}
 	return output

@@ -4,6 +4,7 @@ import (
 	"log"
 	"math"
 	"strconv"
+	"strings"
 )
 
 // Convert a list strings to a list of integers.
@@ -37,6 +38,24 @@ func ConvertStringToDigits(input []string) [][]int {
 		output = append(output, row)
 	}
 	return output
+}
+
+func SplitDigitsFromSeperatedString(digitString string) []int {
+	numbers := make([]int, 0)
+	s := strings.FieldsFunc(digitString, Split)
+	log.Println(s)
+	for _, digit := range s {
+		digitInt, error := strconv.Atoi(digit)
+		if error != nil {
+			log.Fatal(error)
+		}
+		numbers = append(numbers, digitInt)
+	}
+	return numbers
+}
+
+func Split(r rune) bool {
+	return r == ' ' || r == '\t' || r == '\n' || r == ','
 }
 
 // Convert Binary to Decimal.

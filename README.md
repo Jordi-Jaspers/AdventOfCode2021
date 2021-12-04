@@ -1,4 +1,4 @@
-<h3 align="center">Advent Of Code 2021</h3>
+<h3 align="center">Advent Of Code 2N/A21</h3>
 
 ---
 
@@ -23,31 +23,31 @@ Collect stars by solving puzzles. Two puzzles will be made available on each day
 Here are the current completion statistics for each day. Gold indicates users that have completed both parts of a puzzle, while silver indicates users that have completed only the first half. Each * or * star represents up to 3234 users.
 
 **Current progress:**
-25       0      0  
-24       0      0  
-23       0      0  
-22       0      0  
-21       0      0  
-20       0      0  
-19       0      0  
-18       0      0  
-17       0      0  
-16       0      0  
-15       0      0  
-14       0      0  
-13       0      0  
-12       0      0  
-11       0      0  
-10       0      0  
- 9       0      0  
- 8       0      0  
- 7       0      0  
- 6       0      0  
- 5       0      0  
- 4       0      0  
- 3       0      0  
- 2   86195   4337  *****************************
- 1  115456  13878  *****************************************
+25       N/A      N/A  
+24       N/A      N/A  
+23       N/A      N/A  
+22       N/A      N/A  
+21       N/A      N/A  
+20       N/A      N/A  
+19       N/A      N/A  
+18       N/A      N/A  
+17       N/A      N/A  
+16       N/A      N/A  
+15       N/A      N/A  
+14       N/A      N/A  
+13       N/A      N/A  
+12       N/A      N/A  
+11       N/A      N/A  
+10       N/A      N/A  
+ 9       N/A      N/A  
+ 8       N/A      N/A  
+ 7       N/A      N/A  
+ 6       N/A      N/A  
+ 5       N/A      N/A  
+ 4       N/A      N/A  
+ 3       N/A      N/A  
+ 2   done.   done.
+ 1  done.  done.
 
 ---
 

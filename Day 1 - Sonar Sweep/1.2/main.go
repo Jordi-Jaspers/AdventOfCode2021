@@ -23,55 +23,23 @@
 package main
 
 import (
-	"bufio"
 	"log"
-	"os"
-	"strconv"
+
+	utils "github.com/Jordi-Jaspers/AdventOfCode2021/Util"
 )
 
 func main() {
 	// Read the input file.
-	content := readInput("input.txt")
+	content := utils.ReadInput("../input.txt")
 
 	// Convert the input to integers.
-	input := convertStringToInt(content)
+	input := utils.ConvertStringToInt(content)
 
 	// Remove the noise.
 	input = removeNoise(input)
 
 	// Count the number of times the sum of the three numbers is larger than the previous sum.
 	log.Println(increasingCounter(input))
-}
-
-// Migrate a text file to a slice of of strings.
-func readInput(fileName string) []string {
-	input := make([]string, 0)
-
-	file, err := os.Open(fileName)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		input = append(input, scanner.Text())
-	}
-
-	return input
-}
-
-// Convert a list strings to a list of integers.
-func convertStringToInt(input []string) []int {
-	var output []int
-	for _, v := range input {
-		i, err := strconv.Atoi(v)
-		if err != nil {
-			log.Fatal(err)
-		}
-		output = append(output, i)
-	}
-	return output
 }
 
 // add 3 elements to the list and move the window forward.

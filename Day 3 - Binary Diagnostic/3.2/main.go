@@ -28,52 +28,36 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
 	"log"
-	"math"
-	"os"
-	"strconv"
+
+	utils "github.com/Jordi-Jaspers/AdventOfCode2021/Util"
 )
 
 func main() {
 
 	// Read the input file
-	fmt.Println("Reading input file...")
-	input := readInput("input.txt")
+	log.Println("Reading input file...")
+	input := utils.ReadInput("../input.txt")
 
 	// Convert the input to a slice of digits
-	fmt.Println("Converting input to digits...")
-	inputInt := convertStringToDigits(input)
+	log.Println("Converting input to digits...")
+	inputInt := utils.ConvertStringToDigits(input)
 
 	// Calculate the oxygen rating
-	fmt.Println("Calculating oxygen rating...")
+	log.Println("Calculating oxygen rating...")
 	oxygenRating := getRating(inputInt, true)
-	fmt.Println("Oxygen rating:", oxygenRating)
+	log.Println("Oxygen rating:", oxygenRating)
 
 	// Calculate the CO2 scrubber rating
-	fmt.Println("Calculating CO2 scrubber rating...")
+	log.Println("Calculating CO2 scrubber rating...")
 	scrubberRating := getRating(inputInt, false)
-	fmt.Println("CO2 scrubber rating:", scrubberRating)
+	log.Println("CO2 scrubber rating:", scrubberRating)
 
 	// Calculate the life support rating
-	lifeSupportRating := getDecimal(oxygenRating) * getDecimal(scrubberRating)
+	lifeSupportRating := utils.ConvertBinaryToDecimal(oxygenRating) * utils.ConvertBinaryToDecimal(scrubberRating)
 
 	// print the output
-	fmt.Printf("The life support rating is: %d\n", lifeSupportRating)
-}
-
-// Convert binary to decimal.
-func getDecimal(binary []int) int {
-	length := len(binary) - 1
-	decimal := 0
-
-	for i := length; i != -1; i-- {
-		if binary[i] == 1 {
-			decimal += int(math.Pow(2, float64(length-i)))
-		}
-	}
-	return decimal
+	log.Printf("The life support rating is: %d\n", lifeSupportRating)
 }
 
 // Get the rating for the oxygen or CO2 scrubber depending on the state of the switch.
@@ -112,46 +96,4 @@ func getRating(input [][]int, isOxygenRating bool) []int {
 		}
 	}
 	return input[0]
-}
-
-// by splitting the string into a slice of characters, we can convert the string to a slice of digits.
-func convertStringToDigits(input []string) [][]int {
-	var output [][]int
-
-	for _, line := range input {
-
-		row := make([]int, 0)
-		for _, digit := range line {
-
-			// convert rune to int
-			digitInt, err := strconv.Atoi(string(digit))
-
-			// check for errors
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			// append digit to output
-			row = append(row, digitInt)
-		}
-		output = append(output, row)
-	}
-	return output
-}
-
-// Migrate a text file to a slice of of strings.
-func readInput(fileName string) []string {
-	input := make([]string, 0)
-
-	file, err := os.Open(fileName)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		input = append(input, scanner.Text())
-	}
-	return input
 }

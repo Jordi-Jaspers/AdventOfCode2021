@@ -25,23 +25,21 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
 	"log"
-	"os"
-	"strconv"
+
+	utils "github.com/Jordi-Jaspers/AdventOfCode2021/Util"
 )
 
 func main() {
 
 	// Read input
-	input := readInput("input.txt")
+	input := utils.ReadInput("../input.txt")
 
 	// Calculate the output
-	output := increasingCounter(convertStringToInt(input))
+	output := increasingCounter(utils.ConvertStringToInt(input))
 
 	// Printing the output to the console
-	fmt.Println(output)
+	log.Println(output)
 }
 
 // Check if the next number is larger than the previous one. Add to the counter.
@@ -55,35 +53,4 @@ func increasingCounter(input []int) int {
 	}
 
 	return counter
-}
-
-// Convert a list strings to a list of integers.
-func convertStringToInt(input []string) []int {
-	var output []int
-	for _, v := range input {
-		i, err := strconv.Atoi(v)
-		if err != nil {
-			log.Fatal(err)
-		}
-		output = append(output, i)
-	}
-	return output
-}
-
-// Migrate a text file to a slice of of strings.
-func readInput(fileName string) []string {
-	input := make([]string, 0)
-
-	file, err := os.Open(fileName)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		input = append(input, scanner.Text())
-	}
-
-	return input
 }

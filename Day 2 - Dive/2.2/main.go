@@ -23,23 +23,22 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
 	"log"
-	"os"
 	"regexp"
 	"strconv"
+
+	utils "github.com/Jordi-Jaspers/AdventOfCode2021/Util"
 )
 
 func main() {
 	// Read the input file.
-	input := readInput("input.txt")
+	input := utils.ReadInput("../input.txt")
 
 	// Calculate the final position.
 	output := getSubmarinePosition(input)
 
 	// Print the output.
-	fmt.Println(output)
+	log.Println(output)
 }
 
 // Calculate the final position by multiplying the horizontal position by the depth.
@@ -84,27 +83,8 @@ func getSubmarinePosition(input []string) int {
 			// Decrease the aim by the distance.
 			aim -= distance
 		default:
-			// Print an error message.
-			fmt.Println("Invalid direction:", direction)
+			log.Fatal("Invalid direction:", direction)
 		}
 	}
 	return x * y
-}
-
-// Migrate a text file to a slice of of strings.
-func readInput(fileName string) []string {
-	input := make([]string, 0)
-
-	file, err := os.Open(fileName)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		input = append(input, scanner.Text())
-	}
-
-	return input
 }

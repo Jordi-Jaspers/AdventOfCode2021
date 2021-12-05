@@ -3,6 +3,7 @@ package main
 import (
 	utils "github.com/Jordi-Jaspers/AdventOfCode2021/Util"
 	"log"
+	"math"
 )
 
 type Vector struct {
@@ -64,27 +65,65 @@ func checkOverlap(space Space, vectors []Vector) Space {
 	}
 
 	for _, vector := range vectors {
-		if vector.start.x > vector.end.x {
-			for x := vector.start.x; x >= vector.end.x; x-- {
-				if vector.start.y > vector.end.y {
-					for y := vector.start.y; y >= vector.end.y; y-- {
-						matrix[x-1][y-1]++
+		slope := math.Abs(float64(vector.end.y - vector.start.y)) / math.Abs(float64(vector.end.x - vector.start.x))
+		if vector.start.x == vector.end.x || vector.start.y == vector.end.y {
+			if vector.start.x > vector.end.x {
+				for x := vector.start.x; x >= vector.end.x; x-- {
+					if vector.start.y > vector.end.y {
+						for y := vector.start.y; y >= vector.end.y; y-- {
+							matrix[x-1][y-1]++
+						}
+					} else {
+						for y := vector.start.y; y <= vector.end.y; y++ {
+							matrix[x-1][y-1]++
+						}
 					}
-				} else if vector.start.y <= vector.end.y {
-					for y := vector.start.y; y <= vector.end.y; y++ {
-						matrix[x-1][y-1]++
+				}
+			} else if vector.start.x <= vector.end.x{
+				for x := vector.start.x; x <= vector.end.x; x++ {
+					if vector.start.y > vector.end.y {
+						for y := vector.start.y; y >= vector.end.y; y-- {
+							matrix[x-1][y-1]++
+						}
+					} else {
+						for y := vector.start.y; y <= vector.end.y; y++ {
+							matrix[x-1][y-1]++
+						}
 					}
 				}
 			}
-		} else if vector.start.x <= vector.end.x {
-			for x := vector.start.x; x <= vector.end.x; x++ {
-				if vector.start.y > vector.end.y {
-					for y := vector.start.y; y >= vector.end.y; y-- {
-						matrix[x-1][y-1]++
+		}
+		if slope == float64(1) {
+			log.Println("slope is 1")
+			if vector.start.x > vector.end.x {
+				steps := vector.start.x - vector.end.x
+				log.Println("start.x > end.x", steps)
+				for i := 1; i <= steps; i++ {
+					log.Println("i", i)
+					if vector.start.y > vector.end.y {
+						log.Println("start.y > end.y")
+						matrix[vector.start.x-i-1][vector.start.y-i-1]++
+						log.Println("matrix[", vector.start.x-i-1, "][", vector.start.y-i-1, "]++")
+					} else {
+						log.Println("start.y < end.y")
+						matrix[vector.start.x-i-1][vector.start.y+i-1]++
+						log.Println("matrix[", vector.start.x-i-1, "][", vector.start.y-i-1, "]++")
 					}
-				} else if vector.start.y <= vector.end.y {
-					for y := vector.start.y; y <= vector.end.y; y++ {
-						matrix[x-1][y-1]++
+				}
+			} else if vector.start.x <= vector.end.x{
+				steps := vector.end.x - vector.start.x
+				log.Println("start.x < end.x", steps)
+
+				for i := 1; i <= steps; i++ {
+					log.Println("i", i)
+					if vector.start.y > vector.end.y {
+						log.Println("start.y > end.y")
+						matrix[vector.start.x+i-1][vector.start.y-i-1]++
+						log.Println("matrix[", vector.start.x-i-1, "][", vector.start.y-i-1, "]++")
+					} else {
+						log.Println("start.y < end.y")
+						matrix[vector.start.x+i-1][vector.start.y-i-1]++
+						log.Println("matrix[", vector.start.x-i-1, "][", vector.start.y-i-1, "]++")
 					}
 				}
 			}

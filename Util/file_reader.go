@@ -1,4 +1,4 @@
-// Exporting functions from another package require that the identifier of the function begins with a capital letter.
+// Package utils Exporting functions from another package require that the identifier of the function begins with a capital letter.
 package utils
 
 import (
@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-// Migrate a text file to a slice of of strings.
+// ReadInput Migrate a text file to a slice of strings.
 func ReadInput(fileName string) []string {
 	input := make([]string, 0)
 

@@ -32,21 +32,38 @@ So, the horizontal and vertical lines from the above list would produce the foll
 ..........
 ..........
 222111....
-
 In this diagram, the top left corner is 0,0 and the bottom right corner is 9,9. Each position is shown as the number of lines which cover that point or . if no line covers that point. The top-left pair of 1s, for example, comes from 2,2 -> 2,1; the very bottom row is formed by the overlapping lines 0,9 -> 5,9 and 0,9 -> 2,9.
 
 To avoid the most dangerous areas, you need to determine the number of points where at least two lines overlap. In the above example, this is anywhere in the diagram with a 2 or larger - a total of 5 points.
 
 Consider only horizontal and vertical lines. At how many points do at least two lines overlap?
 
+Your puzzle answer was 4655.
+
 # Part 2
 
-On the other hand, it might be wise to try a different strategy: let the giant squid win.
+Unfortunately, considering only horizontal and vertical lines doesn't give you the full picture; you need to also consider diagonal lines.
 
-You aren't sure how many bingo boards a giant squid could play at once, so rather than waste time counting its arms, the safe thing to do is to figure out which board will win last and choose that one. That way, no matter which boards it picks, it will win for sure.
+Because of the limits of the hydrothermal vent mapping system, the lines in your list will only ever be horizontal, vertical, or a diagonal line at exactly 45 degrees. In other words:
 
-In the above example, the second board is the last to win, which happens after 13 is eventually called and its middle column is completely marked. If you were to keep playing until this point, the second board would have a sum of unmarked numbers equal to 148 for a final score of 148 * 13 = 1924.
+An entry like 1,1 -> 3,3 covers points 1,1, 2,2, and 3,3.
+An entry like 9,7 -> 7,9 covers points 9,7, 8,8, and 7,9.
+Considering all lines from the above example would now produce the following diagram:
 
-Figure out which board will win last. Once it wins, what would its final score be?
+1.1....11.
+.111...2..
+..2.1.111.
+...1.2.2..
+.112313211
+...1.2....
+..1...1...
+.1.....1..
+1.......1.
+222111....
+You still need to determine the number of points where at least two lines overlap. In the above example, this is still anywhere in the diagram with a 2 or larger - now a total of 12 points.
 
-Your puzzle answer was 21184.
+Consider all of the lines. At how many points do at least two lines overlap?
+
+
+
+

@@ -45,9 +45,9 @@ func SplitDigitsFromSeperatedString(digitString string) []int {
 	numbers := make([]int, 0)
 	s := strings.FieldsFunc(digitString, split)
 	for _, digit := range s {
-		digitInt, error := strconv.Atoi(digit)
-		if error != nil {
-			log.Fatal(error)
+		digitInt, err := strconv.Atoi(digit)
+		if err != nil {
+			log.Fatal(err)
 		}
 		numbers = append(numbers, digitInt)
 	}
@@ -55,7 +55,7 @@ func SplitDigitsFromSeperatedString(digitString string) []int {
 }
 
 func split(r rune) bool {
-	return r == ' ' || r == '\t' || r == '\n' || r == ','
+	return r == ' ' || r == '\t' || r == '\n' || r == ',' || r == '-' || r == '>'
 }
 
 // ConvertBinaryToDecimal Convert Binary to Decimal.

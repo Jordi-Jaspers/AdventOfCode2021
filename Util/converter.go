@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-// Convert a list strings to a list of integers.
+// ConvertStringToInt Convert a list strings to a list of integers.
 func ConvertStringToInt(input []string) []int {
 	var output []int
 	for _, v := range input {
@@ -20,7 +20,7 @@ func ConvertStringToInt(input []string) []int {
 	return output
 }
 
-// Convert the string to a slice of digits by splitting the string into a slice of characters.
+// ConvertStringToDigits Convert the string to a slice of digits by splitting the string into a slice of characters.
 func ConvertStringToDigits(input []string) [][]int {
 	var output [][]int
 
@@ -40,10 +40,10 @@ func ConvertStringToDigits(input []string) [][]int {
 	return output
 }
 
+// SplitDigitsFromSeperatedString ConvertDigitsToString Convert the digits to a string.
 func SplitDigitsFromSeperatedString(digitString string) []int {
 	numbers := make([]int, 0)
-	s := strings.FieldsFunc(digitString, Split)
-	log.Println(s)
+	s := strings.FieldsFunc(digitString, split)
 	for _, digit := range s {
 		digitInt, error := strconv.Atoi(digit)
 		if error != nil {
@@ -54,11 +54,11 @@ func SplitDigitsFromSeperatedString(digitString string) []int {
 	return numbers
 }
 
-func Split(r rune) bool {
+func split(r rune) bool {
 	return r == ' ' || r == '\t' || r == '\n' || r == ','
 }
 
-// Convert Binary to Decimal.
+// ConvertBinaryToDecimal Convert Binary to Decimal.
 func ConvertBinaryToDecimal(binary []int) int {
 	length := len(binary) - 1
 	output := 0

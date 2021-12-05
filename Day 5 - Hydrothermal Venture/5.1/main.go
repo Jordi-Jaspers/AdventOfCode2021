@@ -3,11 +3,13 @@ package main
 import (
 	utils "github.com/Jordi-Jaspers/AdventOfCode2021/Util"
 	"log"
+	"math"
 )
 
 type Vector struct {
 	start Coordinate
 	end   Coordinate
+	slope float64
 }
 
 type Coordinate struct {
@@ -64,30 +66,25 @@ func checkOverlap(space Space, vectors []Vector) Space {
 	}
 
 	for _, vector := range vectors {
-		if vector.start.x == vector.end.x || vector.start.y == vector.end.y {
-			if vector.start.x > vector.end.x {
-				for x := vector.start.x; x >= vector.end.x; x-- {
-					if vector.start.y > vector.end.y {
-						for y := vector.start.y; y >= vector.end.y; y-- {
-							matrix[x-1][y-1]++
-						}
-					} else {
-						for y := vector.start.y; y <= vector.end.y; y++ {
-							matrix[x-1][y-1]++
-						}
-					}
+		deltaX := float64(vector.end.x - vector.start.x)
+		deltaY := float64(vector.end.y - vector.start.y)
+
+		if deltaX == float64(0){
+			log.Println("X-coordinate is constant.")
+			for i := 0; float64(i) <= math.Abs(deltaY); i++ {
+				if deltaY < float64(0) {
+					matrix[vector.start.x-1][vector.start.y-1-i]++
+				} else {
+					matrix[vector.start.x-1][vector.start.y-1+i]++
 				}
-			} else if vector.start.x <= vector.end.x{
-				for x := vector.start.x; x <= vector.end.x; x++ {
-					if vector.start.y > vector.end.y {
-						for y := vector.start.y; y >= vector.end.y; y-- {
-							matrix[x-1][y-1]++
-						}
-					} else {
-						for y := vector.start.y; y <= vector.end.y; y++ {
-							matrix[x-1][y-1]++
-						}
-					}
+			}
+		} else if deltaY == float64(0) {
+			log.Println("Y-coordinate is constant.")
+			for i := 0; float64(i) <= math.Abs(deltaX); i++ {
+				if deltaX < float64(0) {
+					matrix[vector.start.x-1-i][vector.start.y-1]++
+				} else {
+					matrix[vector.start.x-1+i][vector.start.y-1]++
 				}
 			}
 		}
@@ -114,6 +111,7 @@ func setup(input []string) (Space, []Vector) {
 				x: coordinates[2],
 				y: coordinates[3],
 			},
+			slope: math.Abs(float64(coordinates[3] - coordinates[1])) / math.Abs(float64(coordinates[2] - coordinates[0])),
 		}
 		vectors = append(vectors, vector)
 

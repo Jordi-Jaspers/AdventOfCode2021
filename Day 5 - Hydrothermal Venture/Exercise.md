@@ -1,71 +1,60 @@
 # Part 1
 
-You come across a field of hydrothermal vents on the ocean floor! These vents constantly produce large, opaque clouds, so it would be best to avoid them if possible.
+The sea floor is getting steeper. Maybe the sleigh keys got carried this way?
 
-They tend to form in lines; the submarine helpfully produces a list of nearby lines of vents (your puzzle input) for you to review. For example:
+A massive school of glowing lanternfish swims past. They must spawn quickly to reach such large numbers - maybe exponentially quickly? You should model their growth rate to be sure.
 
-0,9 -> 5,9
-8,0 -> 0,8
-9,4 -> 3,4
-2,2 -> 2,1
-7,0 -> 7,4
-6,4 -> 2,0
-0,9 -> 2,9
-3,4 -> 1,4
-0,0 -> 8,8
-5,5 -> 8,2
-Each line of vents is given as a line segment in the format x1,y1 -> x2,y2 where x1,y1 are the coordinates of one end the line segment and x2,y2 are the coordinates of the other end. These line segments include the points at both ends. In other words:
+Although you know nothing about this specific species of lanternfish, you make some guesses about their attributes. Surely, each lanternfish creates a new lanternfish once every 7 days.
 
-An entry like 1,1 -> 1,3 covers points 1,1, 1,2, and 1,3.
-An entry like 9,7 -> 7,7 covers points 9,7, 8,7, and 7,7.
-For now, only consider horizontal and vertical lines: lines where either x1 = x2 or y1 = y2.
+However, this process isn't necessarily synchronized between every lanternfish - one lanternfish might have 2 days left until it creates another lanternfish, while another might have 4. So, you can model each fish as a single number that represents the number of days until it creates a new lanternfish.
 
-So, the horizontal and vertical lines from the above list would produce the following diagram:
+Furthermore, you reason, a new lanternfish would surely need slightly longer before it's capable of producing more lanternfish: two more days for its first cycle.
 
-.......1..
-..1....1..
-..1....1..
-.......1..
-.112111211
-..........
-..........
-..........
-..........
-222111....
-In this diagram, the top left corner is 0,0 and the bottom right corner is 9,9. Each position is shown as the number of lines which cover that point or . if no line covers that point. The top-left pair of 1s, for example, comes from 2,2 -> 2,1; the very bottom row is formed by the overlapping lines 0,9 -> 5,9 and 0,9 -> 2,9.
+So, suppose you have a lanternfish with an internal timer value of 3:
 
-To avoid the most dangerous areas, you need to determine the number of points where at least two lines overlap. In the above example, this is anywhere in the diagram with a 2 or larger - a total of 5 points.
+After one day, its internal timer would become 2.
+After another day, its internal timer would become 1.
+After another day, its internal timer would become 0.
+After another day, its internal timer would reset to 6, and it would create a new lanternfish with an internal timer of 8.
+After another day, the first lanternfish would have an internal timer of 5, and the second lanternfish would have an internal timer of 7.
+A lanternfish that creates a new fish resets its timer to 6, not 7 (because 0 is included as a valid timer value). The new lanternfish starts with an internal timer of 8 and does not start counting down until the next day.
 
-Consider only horizontal and vertical lines. At how many points do at least two lines overlap?
+Realizing what you're trying to do, the submarine automatically produces a list of the ages of several hundred nearby lanternfish (your puzzle input). For example, suppose you were given the following list:
 
-Your puzzle answer was 4655.
+3,4,3,1,2
+This list means that the first fish has an internal timer of 3, the second fish has an internal timer of 4, and so on until the fifth fish, which has an internal timer of 2. Simulating these fish over several days would proceed as follows:
+
+Initial state: 3,4,3,1,2
+After  1 day:  2,3,2,0,1
+After  2 days: 1,2,1,6,0,8
+After  3 days: 0,1,0,5,6,7,8
+After  4 days: 6,0,6,4,5,6,7,8,8
+After  5 days: 5,6,5,3,4,5,6,7,7,8
+After  6 days: 4,5,4,2,3,4,5,6,6,7
+After  7 days: 3,4,3,1,2,3,4,5,5,6
+After  8 days: 2,3,2,0,1,2,3,4,4,5
+After  9 days: 1,2,1,6,0,1,2,3,3,4,8
+After 10 days: 0,1,0,5,6,0,1,2,2,3,7,8
+After 11 days: 6,0,6,4,5,6,0,1,1,2,6,7,8,8,8
+After 12 days: 5,6,5,3,4,5,6,0,0,1,5,6,7,7,7,8,8
+After 13 days: 4,5,4,2,3,4,5,6,6,0,4,5,6,6,6,7,7,8,8
+After 14 days: 3,4,3,1,2,3,4,5,5,6,3,4,5,5,5,6,6,7,7,8
+After 15 days: 2,3,2,0,1,2,3,4,4,5,2,3,4,4,4,5,5,6,6,7
+After 16 days: 1,2,1,6,0,1,2,3,3,4,1,2,3,3,3,4,4,5,5,6,8
+After 17 days: 0,1,0,5,6,0,1,2,2,3,0,1,2,2,2,3,3,4,4,5,7,8
+After 18 days: 6,0,6,4,5,6,0,1,1,2,6,0,1,1,1,2,2,3,3,4,6,7,8,8,8,8
+Each day, a 0 becomes a 6 and adds a new 8 to the end of the list, while each other number decreases by 1 if it was present at the start of the day.
+
+In this example, after 18 days, there are a total of 26 fish. After 80 days, there would be a total of 5934.
+
+Find a way to simulate lanternfish. How many lanternfish would there be after 80 days?
+
+Your puzzle answer was 375482.
 
 # Part 2
 
-Unfortunately, considering only horizontal and vertical lines doesn't give you the full picture; you need to also consider diagonal lines.
+Suppose the lanternfish live forever and have unlimited food and space. Would they take over the entire ocean?
 
-Because of the limits of the hydrothermal vent mapping system, the lines in your list will only ever be horizontal, vertical, or a diagonal line at exactly 45 degrees. In other words:
+After 256 days in the example above, there would be a total of 26984457539 lanternfish!
 
-An entry like 1,1 -> 3,3 covers points 1,1, 2,2, and 3,3.
-An entry like 9,7 -> 7,9 covers points 9,7, 8,8, and 7,9.
-Considering all lines from the above example would now produce the following diagram:
-
-1.1....11.
-.111...2..
-..2.1.111.
-...1.2.2..
-.112313211
-...1.2....
-..1...1...
-.1.....1..
-1.......1.
-222111....
-You still need to determine the number of points where at least two lines overlap. In the above example, this is still anywhere in the diagram with a 2 or larger - now a total of 12 points.
-
-Consider all of the lines. At how many points do at least two lines overlap?
-
-Your puzzle answer was 20500.
-
-
-
-
+How many lanternfish would there be after 256 days?
